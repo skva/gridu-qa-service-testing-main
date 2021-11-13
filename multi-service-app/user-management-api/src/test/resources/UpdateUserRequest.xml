@@ -1,0 +1,41 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://gridu.qa.payment.griddynamics.com/springsoap/gen">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gen:updateUserRequest>
+            <gen:userDetails>
+                <gen:id>15</gen:id>
+                <gen:name>Jack updd</gen:name>
+                <gen:lastName>White upd</gen:lastName>
+                <gen:email>JB@gmail.com</gen:email>
+                <!--Optional:-->
+                <gen:birthday>12.12.1900</gen:birthday>
+                <!--Optional:-->
+                <gen:addresses>
+                    <!--1 or more repetitions:-->
+                    <gen:address>
+                        <gen:state>OR</gen:state>
+                        <gen:city>Portland</gen:city>
+                        <gen:zip>55555</gen:zip>
+                        <gen:line1>3rd Avenue</gen:line1>
+                        <gen:line2>AP 21</gen:line2>
+                        <!--Optional:-->
+                        <gen:id>15</gen:id>
+                    </gen:address>
+                </gen:addresses>
+                <!--Optional:-->
+                <gen:payments>
+                    <!--1 or more repetitions:-->
+                    <gen:payment>
+                        <gen:cardNumber>5555555555555555</gen:cardNumber>
+                        <gen:expiryYear>2030</gen:expiryYear>
+                        <gen:expiryMonth>12</gen:expiryMonth>
+                        <gen:cardholder>JACK WHITE</gen:cardholder>
+                        <gen:cvv>999</gen:cvv>
+                        <!--Optional:-->
+                        <gen:id>15</gen:id>
+                    </gen:payment>
+                </gen:payments>
+            </gen:userDetails>
+        </gen:updateUserRequest>
+    </soapenv:Body>
+</soapenv:Envelope>
