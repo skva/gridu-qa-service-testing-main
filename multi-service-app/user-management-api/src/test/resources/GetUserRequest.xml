@@ -1,8 +1,0 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://gridu.qa.payment.griddynamics.com/springsoap/gen">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <gen:getUserDetailsRequest>
-            <gen:userId>15</gen:userId>
-        </gen:getUserDetailsRequest>
-    </soapenv:Body>
-</soapenv:Envelope>

@@ -3,6 +3,7 @@ package com.griddynamics.gridu.qa.address.service;
 import com.griddynamics.gridu.qa.address.db.dao.AddressRepository;
 import com.griddynamics.gridu.qa.address.db.model.AddressModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

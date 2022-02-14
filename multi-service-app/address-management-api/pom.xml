@@ -70,7 +70,34 @@
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
         </dependency>
+
+
+
+        <!-- https://mvnrepository.com/artifact/com.github.JensPiegsa/wiremock-extension -->
+        <dependency>
+            <groupId>com.github.JensPiegsa</groupId>
+            <artifactId>wiremock-extension</artifactId>
+            <version>0.4.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+
+
+
+
+    <!-- wiremock-extension repo -->
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+
+
+
 
     <build>
         <plugins>
