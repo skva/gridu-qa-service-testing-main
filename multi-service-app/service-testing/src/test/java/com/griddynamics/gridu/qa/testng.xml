@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="User">
+    <test name="User Tests">
+        <classes>
+            <class name="com.griddynamics.gridu.qa.util.DataBaseUtil"/>
+            <class name="com.griddynamics.gridu.qa.user.CreateUserTest"/>
+            <class name="com.griddynamics.gridu.qa.user.DeleteUserTest"/>
+            <class name="com.griddynamics.gridu.qa.user.GetUserDetailsTest"/>
+            <class name="com.griddynamics.gridu.qa.user.UpdateUserTest"/>
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
