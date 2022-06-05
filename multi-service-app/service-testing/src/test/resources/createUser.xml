@@ -1,6 +1,6 @@
-<createUserRequest>
-    <name>Jack25</name>
-    <lastName>White</lastName>
+<createUserRequest name="createrUserRequest">
+    <name name="name">Jack25</name>
+    <lastName name="lastName">White</lastName>
     <email>JB@gmail.com</email>
     <!--Optional:-->
     <birthday>2014-01-07+04:00</birthday>

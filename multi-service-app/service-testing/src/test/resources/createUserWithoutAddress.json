@@ -1,17 +1,10 @@
 {
-  "name": "Jack23",
+  "name": "Jack",
   "lastName": "White",
   "email": "JB@gmail.com",
-  "birthday": "2014-01-07",
+  "birthday": "2019-01-07",
   "addresses": {
-    "address": [
-      {
-        "state": "OR",
-        "city": "Portland",
-        "zip": "55555",
-        "line1": "3rd Avenue",
-        "line2": "AP 23"
-      } ]
+
   },
   "payments": {
     "payment": [

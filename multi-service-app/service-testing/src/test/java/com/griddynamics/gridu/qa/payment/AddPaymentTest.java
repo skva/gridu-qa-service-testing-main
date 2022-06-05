@@ -8,28 +8,29 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class AddPaymentTest {
 
     private static final String HOST = "localhost";
-    private static final int PORT = 8989;
+    private static final int PORT = 8999;
     private static WireMockServer server = new WireMockServer(PORT);
 
-//    @BeforeClass
-//    public void initServer() {
-//        System.out.println("Init");
-//
-//        server.start();
-//        WireMock.configureFor(HOST, PORT);
-//
-//        ResponseDefinitionBuilder mockResponse = new ResponseDefinitionBuilder();
-//        mockResponse.withStatus(200);
-//
-//        //Proxying
-//        WireMock.stubFor(WireMock.any(WireMock.anyUrl())
-//                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8989")));
-//    }
+    @BeforeClass
+    public void initServer() {
+        System.out.println("Init");
+
+        server.start();
+        WireMock.configureFor(HOST, PORT);
+
+        ResponseDefinitionBuilder mockResponse = new ResponseDefinitionBuilder();
+        mockResponse.withStatus(200);
+
+        //Proxying
+        WireMock.stubFor(WireMock.any(WireMock.anyUrl())
+                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8989")));
+    }
 
     @Test
     public void addPaymentTest() {
@@ -66,4 +67,19 @@ public class AddPaymentTest {
         //Assert
         //Assert fields
     }
+
+    @Test
+    public void addPaymentWithoutBodyMockTest() {
+        //Configure mock for payment gateway
+        WireMock.stubFor(WireMock.post(WireMock.anyUrl()).
+                willReturn(ResponseDefinitionBuilder.responseDefinition().
+                        withBody("Token111").withStatus(200).withHeader("Content-Type", "text/plain")));
+        //Call payment api
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .post("http://localhost:8282/payment");
+        //Assert
+        //Assert fields
+    }
+
 }
