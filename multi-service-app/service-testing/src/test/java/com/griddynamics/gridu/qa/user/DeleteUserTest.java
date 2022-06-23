@@ -1,13 +1,18 @@
 package com.griddynamics.gridu.qa.user;
 
-import com.griddynamics.gridu.qa.util.DataBaseUtil;
+import com.griddynamics.gridu.qa.util.Util;
 import com.griddynamics.gridu.qa.util.Service;
 import com.griddynamics.payment.qa.gridu.springsoap.gen.DeleteUserRequest;
+import com.griddynamics.payment.qa.gridu.springsoap.gen.GetUserDetailsRequest;
+import com.griddynamics.payment.qa.gridu.springsoap.gen.GetUserDetailsResponse;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
-public class DeleteUserTest extends DataBaseUtil {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class DeleteUserTest extends Util {
 
     @Test
     public void deleteUserTest() throws Exception {
@@ -16,6 +21,20 @@ public class DeleteUserTest extends DataBaseUtil {
 
         Service service = new Service();
         service.clientService().deleteUser(deleteUserRequest);
+
+        // Assert
+        SoftAssertions softly = new SoftAssertions();
+
+        GetUserDetailsRequest getUserDetailsRequest = new GetUserDetailsRequest();
+        getUserDetailsRequest.setUserId(5);
+        GetUserDetailsResponse getUserDetailsResponse =
+                service.clientService().getUserDetails(getUserDetailsRequest);
+
+        assertThat(getUserDetailsResponse.getUserDetails().getName()).isEqualTo("NOT_FOUND");
+        assertThat(getUserDetailsResponse.getUserDetails().getLastName()).isEqualTo("NOT_FOUND");
+        assertThat(getUserDetailsResponse.getUserDetails().getEmail()).isEqualTo("NOT_FOUND");
+
+        softly.assertAll();
     }
 
     @Test(expectedExceptions = {SOAPFaultException.class},

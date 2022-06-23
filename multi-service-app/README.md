@@ -1,3 +1,18 @@
+# Exam
+
+1. E2E - no mock services required (for the “Payment gateway” provided stub-service used)
+![Ex1.png](Ex1.png)
+
+Tests are in user package
+2. Test only “User Management API” (for instance, negative cases, when one of the other services responded with an error)
+![Ex2.png](Ex2.png)
+
+Tests are in user.mocked package
+3. Test “Payment Management” API only (a single mock required)
+![Ex3.png](Ex3.png)
+
+Tests are in payment.mocked package
+
 # Backend testing course application (SUT)
 
 A bunch of (micro) services to be tested (as the final task for the backend testing course)<br/>

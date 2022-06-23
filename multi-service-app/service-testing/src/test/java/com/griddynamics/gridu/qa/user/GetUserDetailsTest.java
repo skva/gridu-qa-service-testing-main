@@ -1,6 +1,6 @@
 package com.griddynamics.gridu.qa.user;
 
-import com.griddynamics.gridu.qa.util.DataBaseUtil;
+import com.griddynamics.gridu.qa.util.Util;
 import com.griddynamics.gridu.qa.util.Service;
 import com.griddynamics.payment.qa.gridu.springsoap.gen.GetUserDetailsRequest;
 import com.griddynamics.payment.qa.gridu.springsoap.gen.GetUserDetailsResponse;
@@ -8,18 +8,17 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetUserDetailsTest extends DataBaseUtil {
+public class GetUserDetailsTest extends Util {
 
     @Test
     public void getUserDetailsTest() throws Exception {
         GetUserDetailsRequest getUserDetailsRequest = new GetUserDetailsRequest();
-        getUserDetailsRequest.setUserId(100);
+        getUserDetailsRequest.setUserId(4);
 
         Service service = new Service();
         GetUserDetailsResponse getUserDetailsResponse =
                 service.clientService().getUserDetails(getUserDetailsRequest);
 
-        //WHY PASS IF ID 100???
         assertThat(getUserDetailsResponse).hasNoNullFieldsOrProperties();
     }
 

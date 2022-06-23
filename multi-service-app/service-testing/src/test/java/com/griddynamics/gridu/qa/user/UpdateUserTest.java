@@ -1,6 +1,6 @@
 package com.griddynamics.gridu.qa.user;
 
-import com.griddynamics.gridu.qa.util.DataBaseUtil;
+import com.griddynamics.gridu.qa.util.Util;
 import com.griddynamics.gridu.qa.util.Parser;
 import com.griddynamics.gridu.qa.util.Service;
 import com.griddynamics.payment.qa.gridu.springsoap.gen.*;
@@ -12,7 +12,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpdateUserTest extends DataBaseUtil {
+public class UpdateUserTest extends Util {
 
     @Test
     public void updateUserTest() throws Exception {
@@ -40,7 +40,6 @@ public class UpdateUserTest extends DataBaseUtil {
     @Test(expectedExceptions = {SOAPFaultException.class},
             expectedExceptionsMessageRegExp = "User with given id does not exist!")
     public void updateNonExistingUserTest() throws Exception {
-        //Parser
         UserDetails userDetails = new UserDetails();
         userDetails.setId(10);
 

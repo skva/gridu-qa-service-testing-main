@@ -1,5 +1,7 @@
 package com.griddynamics.gridu.qa.util;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -10,7 +12,37 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class DataBaseUtil {
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+
+public class Util {
+
+    //WireMock
+    private static final String HOST = "localhost";
+    private static final int PORT = 9091;
+    private static WireMockServer server = new WireMockServer(PORT);
+
+    public void initWiremock() {
+        System.out.println("InitWiremock");
+
+        server.start();
+        configureFor(HOST, PORT);
+
+        // AM stub
+        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/address/.*"))
+                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8181")));
+
+        // PM stub
+        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/payment/.*"))
+                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8282")));
+
+        // Gateway stub
+        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/card/verify"))
+                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8989")));
+
+//        ResponseDefinitionBuilder mockResponse = new ResponseDefinitionBuilder();
+//        mockResponse.withStatus(200);
+
+    }
 
     //Tables
     private final static String USER = "user";
@@ -19,12 +51,14 @@ public class DataBaseUtil {
 
     Sql2o sql2o = new Sql2o(dataSource());
 
-    @BeforeTest
-    public void fillTable() {
+    @BeforeMethod
+    public void prepareEnvironment() {
         cleanDB();
         fillUserTable();
         fillAddressTable();
         fillPaymentTable();
+
+        initWiremock();
     }
 
     public void fillUser(int id, String birthday, String email, String last_name, String name) {
@@ -104,6 +138,12 @@ public class DataBaseUtil {
             e.printStackTrace();
         }
         return mysqlDS;
+    }
+
+    @AfterMethod
+    public void stopWiremock() {
+        server.stop();
+        System.out.println("StopWiremock");
     }
 }
 
