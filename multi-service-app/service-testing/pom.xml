@@ -39,13 +39,16 @@
             <version>${cxf.version}</version>
         </dependency>
 
+
+
+
+
         <!-- Jetty is needed if you're are not using the CXFServlet -->
 <!--        <dependency>-->
 <!--            <groupId>org.apache.cxf</groupId>-->
 <!--            <artifactId>cxf-rt-transports-http-jetty</artifactId>-->
 <!--            <version>${cxf.version}</version>-->
 <!--        </dependency>-->
-
     </dependencies>
 
 
@@ -75,12 +78,4 @@
             </plugin>
         </plugins>
     </build>
-
-
-
-
-
-
-
-
 </project>

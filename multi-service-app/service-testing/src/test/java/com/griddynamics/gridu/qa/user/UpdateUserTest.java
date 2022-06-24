@@ -20,11 +20,6 @@ public class UpdateUserTest extends Util {
         UserDetails userDetails =
                 Parser.parseJson("src/test/resources/updateUser.json", UserDetails.class);
 
-        //CyTTER KOCTbIJIb
-        XMLGregorianCalendar birthday = DatatypeFactory.newInstance()
-                .newXMLGregorianCalendar("2014-01-07+04:00");
-        userDetails.setBirthday(birthday);
-
         UpdateUserRequest updateUserRequest = new UpdateUserRequest();
         updateUserRequest.setUserDetails(userDetails);
 
