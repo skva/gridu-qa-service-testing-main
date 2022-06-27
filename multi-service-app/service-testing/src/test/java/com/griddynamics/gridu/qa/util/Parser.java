@@ -1,6 +1,6 @@
 package com.griddynamics.gridu.qa.util;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 

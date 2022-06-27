@@ -23,6 +23,10 @@ public class UpdateUserTest extends Util {
         UpdateUserRequest updateUserRequest = new UpdateUserRequest();
         updateUserRequest.setUserDetails(userDetails);
 
+        XMLGregorianCalendar birthday = DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar("2014-01-07+04:00");
+        userDetails.setBirthday(birthday);
+
         Service service = new Service();
         UpdateUserResponse updateUserResponse = service.clientService().updateUser(updateUserRequest);
 

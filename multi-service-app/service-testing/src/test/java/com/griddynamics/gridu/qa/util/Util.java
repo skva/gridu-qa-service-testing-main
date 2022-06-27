@@ -139,12 +139,6 @@ public class Util {
         }
         return mysqlDS;
     }
-
-    @AfterMethod
-    public void stopWiremock() {
-        server.stop();
-        System.out.println("StopWiremock");
-    }
 }
 
 
