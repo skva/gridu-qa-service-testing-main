@@ -29,7 +29,7 @@ public class UpdatePaymentGatewayMockedTest extends Util {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(payment)
-                .put("http://localhost:8282/payment");
+                .put(wiremockUrl + paymentPort + "/payment");
         //Assert
         assertThat(payment).usingRecursiveComparison()
                 .ignoringExpectedNullFields().isEqualTo(response);
@@ -52,7 +52,7 @@ public class UpdatePaymentGatewayMockedTest extends Util {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(payment)
-                .put("http://localhost:8282/payment");
+                .put(wiremockUrl + paymentPort + "/payment");
         assertThat(response.getStatusCode()).isEqualTo(404);
     }
 
@@ -65,7 +65,7 @@ public class UpdatePaymentGatewayMockedTest extends Util {
         //Call payment api
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .put("http://localhost:8282/payment");
+                .put(wiremockUrl + paymentPort + "/payment");
         assertThat(response.getStatusCode()).isEqualTo(405);
     }
 }

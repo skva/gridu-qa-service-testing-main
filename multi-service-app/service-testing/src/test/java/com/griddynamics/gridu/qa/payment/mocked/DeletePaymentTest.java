@@ -14,7 +14,7 @@ public class DeletePaymentTest extends Util {
     public void deletePaymentByUserIdTest() {
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .delete("http://localhost:8282/payment/1");
+                .delete(wiremockUrl + paymentPort + "/payment/1");
         //Assert
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -27,7 +27,7 @@ public class DeletePaymentTest extends Util {
     public void deletePaymentByInvalidUserIdTest() {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .delete("http://localhost:8282/payment/invalidId");
+                .delete(wiremockUrl + paymentPort + "/payment/invalidId");
 
         assertThat(response.getStatusCode()).isEqualTo(400);
     }
@@ -38,7 +38,7 @@ public class DeletePaymentTest extends Util {
 
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .delete("http://localhost:8282/payment/" + userId);
+                .delete(wiremockUrl + paymentPort + "/payment/" + userId);
 
         assertThat(response.getStatusCode()).isEqualTo(404);
     }

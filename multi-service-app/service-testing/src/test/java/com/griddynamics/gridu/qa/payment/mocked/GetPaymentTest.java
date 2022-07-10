@@ -19,7 +19,7 @@ public class GetPaymentTest extends Util {
         //Call payment api
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .get("http://localhost:8282/payment/1");
+                .get(wiremockUrl + paymentPort + "/payment/1");
 
         List<Payment> paymentsListFromResponse = response.getBody().jsonPath()
                 .getList(".", Payment.class);
@@ -39,7 +39,7 @@ public class GetPaymentTest extends Util {
     public void getPaymentByInvalidUserIdTest() {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .get("http://localhost:8282/payment/invalidId");
+                .get(wiremockUrl + paymentPort + "/payment/invalidId");
 
         assertThat(response.getStatusCode()).isEqualTo(400);
     }
@@ -50,7 +50,7 @@ public class GetPaymentTest extends Util {
 
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .get("http://localhost:8282/payment/" + userId);
+                .get(wiremockUrl + paymentPort + "/payment/" + userId);
 
         assertThat(response.getStatusCode()).isEqualTo(405);
     }

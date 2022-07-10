@@ -21,27 +21,30 @@ public class Util {
     private static final int PORT = 9091;
     private static WireMockServer server = new WireMockServer(PORT);
 
+    public String wiremockUrl = getPropertyValue("wiremock.url");
+    public String paymentPort = getPropertyValue("wiremock.payment.port");
+    public String addressPort = getPropertyValue("wiremock.address.port");
+    public String gatewayPort = getPropertyValue("wiremock.gateway.port");
+
     public void initWiremock() {
         System.out.println("InitWiremock");
+
+        System.out.println(wiremockUrl);
 
         server.start();
         configureFor(HOST, PORT);
 
-        // AM stub
-        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/address/.*"))
-                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8181")));
-
         // PM stub
         WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/payment/.*"))
-                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8282")));
+                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + paymentPort)));
+
+        // AM stub
+        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/address/.*"))
+                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + addressPort)));
 
         // Gateway stub
         WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/card/verify"))
-                .willReturn(WireMock.aResponse().proxiedFrom("http://localhost:8989")));
-
-//        ResponseDefinitionBuilder mockResponse = new ResponseDefinitionBuilder();
-//        mockResponse.withStatus(200);
-
+                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + gatewayPort)));
     }
 
     //Tables
@@ -138,6 +141,21 @@ public class Util {
             e.printStackTrace();
         }
         return mysqlDS;
+    }
+
+    public String getPropertyValue(String propertyName) {
+        String propertyValue = "";
+        FileInputStream fis = null;
+        Properties properties = new Properties();
+
+        try {
+            fis = new FileInputStream("src/test/resources/wiremock.properties");
+            properties.load(fis);
+            propertyValue = properties.getProperty(propertyName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return propertyValue;
     }
 }
 
