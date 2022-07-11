@@ -10,6 +10,7 @@ import org.testng.annotations.*;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
@@ -21,30 +22,40 @@ public class Util {
     private static final int PORT = 9091;
     private static WireMockServer server = new WireMockServer(PORT);
 
-    public String wiremockUrl = getPropertyValue("wiremock.url");
-    public String paymentPort = getPropertyValue("wiremock.payment.port");
-    public String addressPort = getPropertyValue("wiremock.address.port");
-    public String gatewayPort = getPropertyValue("wiremock.gateway.port");
+//    public String wiremockUrl = getPropertyValue("wiremock.url");
+//    public String paymentPort = getPropertyValue("wiremock.payment.port");
+//    public String addressPort = getPropertyValue("wiremock.address.port");
+//    public String gatewayPort = getPropertyValue("wiremock.gateway.port");
 
     public void initWiremock() {
         System.out.println("InitWiremock");
-
-        System.out.println(wiremockUrl);
 
         server.start();
         configureFor(HOST, PORT);
 
         // PM stub
         WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/payment/.*"))
-                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + paymentPort)));
+                .willReturn(WireMock.aResponse().proxiedFrom(Util.getWiremockPaymentURL())));
 
-        // AM stub
+                // AM stub
         WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/address/.*"))
-                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + addressPort)));
+                .willReturn(WireMock.aResponse().proxiedFrom(Util.getWiremockAddressURL())));
 
         // Gateway stub
         WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/card/verify"))
-                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + gatewayPort)));
+                .willReturn(WireMock.aResponse().proxiedFrom(Util.getWiremockGatewayURL())));
+
+//        // PM stub
+//        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/payment/.*"))
+//                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + paymentPort)));
+//
+//        // AM stub
+//        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/address/.*"))
+//                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + addressPort)));
+//
+//        // Gateway stub
+//        WireMock.stubFor(WireMock.any(WireMock.urlPathMatching("/card/verify"))
+//                .willReturn(WireMock.aResponse().proxiedFrom(wiremockUrl + gatewayPort)));
     }
 
     //Tables
@@ -143,20 +154,73 @@ public class Util {
         return mysqlDS;
     }
 
-    public String getPropertyValue(String propertyName) {
-        String propertyValue = "";
-        FileInputStream fis = null;
-        Properties properties = new Properties();
 
-        try {
-            fis = new FileInputStream("src/test/resources/wiremock.properties");
-            properties.load(fis);
-            propertyValue = properties.getProperty(propertyName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return propertyValue;
+
+    // Config
+    private static final String PATH = "wiremock.properties";
+    private static final Properties config = new Properties();
+
+    public static String getWiremockPaymentURL() {
+        return String.format("%s://%s:%s/", getWiremockScheme(), getWiremockHost(), getWiremockPaymentPort());
     }
+
+    public static String getWiremockAddressURL() {
+        return String.format("%s://%s:%s/", getWiremockScheme(), getWiremockHost(), getWiremockAddressPort());
+    }
+
+    public static String getWiremockGatewayURL() {
+        return String.format("%s://%s:%s/", getWiremockScheme(), getWiremockHost(), getWiremockGatewayPort());
+    }
+
+    public static String getWiremockScheme() {
+        return config.getProperty("wiremock.scheme");
+    }
+
+    public static String getWiremockHost() {
+        return config.getProperty("wiremock.host");
+    }
+
+    public static int getWiremockPaymentPort() {
+        return Integer.parseInt(config.getProperty("wiremock.payment.port"));
+    }
+
+    public static int getWiremockAddressPort() {
+        return Integer.parseInt(config.getProperty("wiremock.address.port"));
+    }
+
+    public static int getWiremockGatewayPort() {
+        return Integer.parseInt(config.getProperty("wiremock.gateway.port"));
+    }
+
+    static {
+        InputStream in = null;
+        try {
+            in = Util.class.getClassLoader().getResourceAsStream(PATH);
+            if (in == null) {
+                in = new FileInputStream(PATH);
+            }
+            config.load(in);
+        } catch (Throwable e) {
+            String msg = "Can't initialize configuration properties bundle.";
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+//
+//    public String getPropertyValue(String propertyName) {
+//        String propertyValue = "";
+//        FileInputStream fis = null;
+//        Properties properties = new Properties();
+//
+//        try {
+//            fis = new FileInputStream("src/test/resources/wiremock.properties");
+//            properties.load(fis);
+//            propertyValue = properties.getProperty(propertyName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return propertyValue;
+//    }
 }
 
 

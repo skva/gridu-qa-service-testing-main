@@ -29,4 +29,6 @@ public class CreateUserTest extends Util {
                 .usingRecursiveComparison().ignoringExpectedNullFields()
                 .isEqualTo(createUserRequest);
     }
+
+    // TODO negative
 }
