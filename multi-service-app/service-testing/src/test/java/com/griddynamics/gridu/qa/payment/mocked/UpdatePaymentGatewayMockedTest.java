@@ -6,7 +6,9 @@ import com.griddynamics.gridu.qa.payment.api.model.Payment;
 import com.griddynamics.gridu.qa.util.Util;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +33,45 @@ public class UpdatePaymentGatewayMockedTest extends Util {
                 .body(payment)
                 .put(Util.getWiremockPaymentURL() + "payment");
         //Assert
-        assertThat(payment).usingRecursiveComparison()
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(payment).usingRecursiveComparison()
                 .ignoringExpectedNullFields().isEqualTo(response);
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        Boolean ver = jsonPathEvaluator.get("verified");
+        softly.assertThat(ver).isEqualTo(true);
+
+        softly.assertAll();
+    }
+
+    @Test
+    public void updatePaymentMockGatewayFailedTest() {
+        //Configure mock for payment gateway
+        WireMock.stubFor(WireMock.put(WireMock.anyUrl()).
+                willReturn(ResponseDefinitionBuilder.responseDefinition().
+                        withStatus(500)));
+        //Make data for call api
+        Payment payment = new Payment();
+        payment.setId(5l);
+        payment.setUserId(1l);
+        payment.setCardNumber("61111111111111111113");
+        payment.setExpiryYear(2033);
+        payment.setExpiryMonth(12);
+        //Call payment api
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(payment)
+                .put(Util.getWiremockPaymentURL() + "payment");
+        //Assert
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(payment).usingRecursiveComparison()
+                .ignoringExpectedNullFields().isEqualTo(response);
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        Boolean ver = jsonPathEvaluator.get("verified");
+        softly.assertThat(ver).isEqualTo(false);
+
+        softly.assertAll();
     }
 
     @Test

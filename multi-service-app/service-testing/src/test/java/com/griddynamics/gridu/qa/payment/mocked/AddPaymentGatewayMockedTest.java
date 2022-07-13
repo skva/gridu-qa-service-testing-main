@@ -6,7 +6,9 @@ import com.griddynamics.gridu.qa.payment.api.model.Payment;
 import com.griddynamics.gridu.qa.util.Util;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,16 +29,54 @@ public class AddPaymentGatewayMockedTest extends Util {
         payment.setExpiryMonth(12);
         payment.setCvv("555");
         payment.setCardHolder("Name");
-        payment.setVerified(true);
         //Call payment api
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(payment)
                 .post(Util.getWiremockPaymentURL() + "payment");
         //Assert
-        assertThat(payment).usingRecursiveComparison()
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(payment).usingRecursiveComparison()
                 .ignoringExpectedNullFields().isEqualTo(response);
-        assertThat(response.getStatusCode()).isEqualTo(201);
+        softly.assertThat(response.getStatusCode()).isEqualTo(201);
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        Boolean ver = jsonPathEvaluator.get("verified");
+        softly.assertThat(ver).isEqualTo(true);
+
+        softly.assertAll();
+    }
+
+    @Test
+    public void addPaymentGatewayFailedTest() {
+        //Configure mock for payment gateway
+        WireMock.stubFor(WireMock.post(WireMock.anyUrl()).
+                willReturn(ResponseDefinitionBuilder.responseDefinition().
+                        withStatus(500)));
+        //Make data for call api
+        Payment payment = new Payment();
+        payment.setUserId(1L);
+        payment.setCardNumber("51111111111111111113");
+        payment.setExpiryYear(2033);
+        payment.setExpiryMonth(12);
+        payment.setCvv("555");
+        payment.setCardHolder("Name");
+        //Call payment api
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(payment)
+                .post(Util.getWiremockPaymentURL() + "payment");
+        //Assert
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(payment).usingRecursiveComparison()
+                .ignoringExpectedNullFields().isEqualTo(response);
+        softly.assertThat(response.getStatusCode()).isEqualTo(201);
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        Boolean ver = jsonPathEvaluator.get("verified");
+        softly.assertThat(ver).isEqualTo(false);
+
+        softly.assertAll();
     }
 
     @Test
