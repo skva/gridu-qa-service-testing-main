@@ -1,0 +1,26 @@
+{
+  "lastName": "White",
+  "email": "JB@gmail.com",
+  "birthday": "2014-01-07",
+  "addresses": {
+    "address": [
+      {
+        "state": "OR",
+        "city": "Portland",
+        "zip": "55555",
+        "line1": "3rd Avenue",
+        "line2": "AP 23"
+      } ]
+  },
+  "payments": {
+    "payment": [
+      {
+        "cardNumber": "444",
+        "expiryYear": "4444",
+        "expiryMonth": "04",
+        "cardholder": "Four",
+        "cvv": "444"
+      }
+    ]
+  }
+}

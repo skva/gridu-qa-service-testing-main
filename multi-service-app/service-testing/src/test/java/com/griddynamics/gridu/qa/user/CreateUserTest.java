@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.soap.SOAPFaultException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,4 +32,17 @@ public class CreateUserTest extends Util {
     }
 
     // TODO negative
+
+    @Test(expectedExceptions = {SOAPFaultException.class},
+            expectedExceptionsMessageRegExp = "Can't create user without name/lastname'")
+    public void createUserWithoutRequiredFieldsTest() throws Exception{
+        CreateUserRequest createUserRequest = Parser.parseJson("src/test/resources/createInvalidUser.json", CreateUserRequest.class);
+
+        XMLGregorianCalendar birthday = DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar("2014-01-07+04:00");
+        createUserRequest.setBirthday(birthday);
+
+        Service service = new Service();
+        service.clientService().createUser(createUserRequest);
+    }
 }
