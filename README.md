@@ -2,14 +2,13 @@
 
 # Exam
 
-1. E2E - no mock services required (for the “Payment gateway” provided stub-service used)
-
+1. E2E - no mock services required (for the “Payment gateway” provided stub-service used)<br/> 
 Tests are in user package
-2. Test only “User Management API” (for instance, negative cases, when one of the other services responded with an error)
 
+2. Test only “User Management API” (for instance, negative cases, when one of the other services responded with an error)<br/>
 Tests are in user.mocked package
-3. Test “Payment Management” API only (a single mock required)
 
+3. Test “Payment Management” API only (a single mock required)<br/>
 Tests are in payment.mocked package
 
 
